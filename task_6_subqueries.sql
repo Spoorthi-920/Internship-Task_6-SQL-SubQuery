@@ -1,3 +1,5 @@
+-- Task 6: SQL subqueries
+-- Understanding sub-queries
 CREATE DATABASE task_6;
 USE task_6;
 
@@ -32,9 +34,9 @@ INSERT INTO Orders (order_id, customer_id, order_amount, order_date) VALUES
 (106, 4, 4100.25, '2024-03-05'),
 (107, 5, 900.00, '2024-01-12');
 
+
 -- Scalar Subquery
 -- High value customer: Find the customer who placed the highest value order.
-
 SELECT customer_name
 FROM Customers
 WHERE customer_id = (
@@ -46,13 +48,13 @@ WHERE customer_id = (
 
 -- Subquery with IN
 -- List customers who have placed at least one order.
-
 SELECT customer_name
 FROM Customers
 WHERE customer_id IN (
     SELECT DISTINCT customer_id
     FROM Orders
 );
+
 
 -- Subquery with EXISTS
 -- Find customers who have not placed any orders.
@@ -63,6 +65,7 @@ WHERE NOT EXISTS (
     FROM Orders o
     WHERE o.customer_id = c.customer_id
 );
+
 
 -- Correlated Subquery
 -- Show the latest order amount for each customer.
@@ -75,6 +78,7 @@ SELECT c.customer_name,
          LIMIT 1
        ) AS latest_order_amount
 FROM Customers c;
+
 
 -- Subquery in FROM 
 -- Find customers whose average order amount is higher than the overall average
@@ -90,15 +94,15 @@ WHERE avg_amount > (SELECT AVG(order_amount) FROM Orders);
 
 -- ALL Usage
 -- Find customers whose every order is above 1000.
-
 SELECT customer_name
 FROM Customers c
-WHERE NOT EXISTS (
-    SELECT 1
+WHERE 1000 < ALL (
+    SELECT o.order_amount
     FROM Orders o
     WHERE o.customer_id = c.customer_id
-    AND o.order_amount <= 1000
 );
+
+
 
 
 
